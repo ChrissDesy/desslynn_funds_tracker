@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 import sqlite3
 from pathlib import Path
 from datetime import datetime
@@ -206,5 +206,115 @@ def expenseConfig():
 
 #   --> acount transactions <--
 
+@app.route("/account/transact", methods = ['POST'])
+def accountTransact():
+    content = request.get_json() # get request data
+
+    typ = content.get('type','')
+    typref = content.get('typeref','')
+    amount = content.get('amount','')
+    currency = content.get('currency','')
+
+    # validate for nulls 
+    if(typ == '' or typref == '' or amount == '' or currency == ''):
+        return 'Bad Request: Missing required fields.', 400
+    
+    # create required variables
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    details = ( typ, typref, amount, 'active', now, '-', currency)
+
+    # open db connection, insert data and get the record
+    dbCon = open_db();
+    dbCon.row_factory = sqlite3.Row
+    sql = "INSERT INTO accountledger(type,typeref,amount,status,datecreated,modifiedby,currency) VALUES(?,?,?,?,?,?,?)"
+    cur = dbCon.cursor().execute(sql, details)
+    dbCon.commit()
+    recRef = cur.lastrowid
+
+    # alter balances accordingly
+    theAmount = amount if (typ == 'IN') else (amount * -1)
+    query = f"UPDATE accountbal SET balance = balance + {theAmount}, lastledgerref = {recRef} WHERE currency = '{currency}'"
+    # print(query)
+    cur = dbCon.cursor().execute(query)
+    dbCon.commit()
+
+    # get the inserted record and return as response
+    cur.execute(f"SELECT * FROM accountledger WHERE id = {recRef}")
+    recs = cur.fetchall()
+    record = dict(recs[0])
+
+    # close db connection
+    dbCon.close()
+
+    return record, 200
+
+@app.route("/transactions/all/<int:page>/<int:size>", methods = ['GET'])
+def allTransactions(page, size):
+    # open db connection
+    dbCon = open_db();
+    dbCon.row_factory = sqlite3.Row
+    response = None
+
+    # retrive the data
+    with dbCon:
+        cur = dbCon.cursor()
+        try:
+            cur.execute(f"SELECT * FROM accountledger ORDER BY datecreated DESC LIMIT {page}, {size}")
+            rows = cur.fetchall()
+
+            response = [dict(r) for r in rows]
+        except Exception as ex:
+            return f'Internal Server Error: {ex.args}', 500
+    
+    # close db connection
+    dbCon.close();
+
+    return response, 200
+
+@app.route("/transactions/by-type/<string:typ>/<int:page>/<int:size>", methods = ['GET'])
+def allTransactionsByType(typ, page, size):
+    # open db connection
+    dbCon = open_db();
+    dbCon.row_factory = sqlite3.Row
+    response = None
+
+    # retrive the data
+    with dbCon:
+        cur = dbCon.cursor()
+        try:
+            cur.execute(f"SELECT * FROM accountledger WHERE type='{typ}' ORDER BY datecreated DESC LIMIT {page}, {size}")
+            rows = cur.fetchall()
+
+            response = [dict(r) for r in rows]
+        except Exception as ex:
+            return f'Internal Server Error: {ex.args}', 500
+    
+    # close db connection
+    dbCon.close();
+
+    return response, 200
+
+@app.route("/account/balances", methods = ['GET'])
+def accountBalances():
+    # open db connection
+    dbCon = open_db();
+    dbCon.row_factory = sqlite3.Row
+    response = None
+
+    # retrive the data
+    with dbCon:
+        cur = dbCon.cursor()
+        try:
+            cur.execute(f"SELECT * FROM accountbal")
+            rows = cur.fetchall()
+
+            response = [dict(r) for r in rows]
+        except Exception as ex:
+            return f'Internal Server Error: {ex.args}', 500
+    
+    # close db connection
+    dbCon.close();
+
+    return response, 200
 
 
