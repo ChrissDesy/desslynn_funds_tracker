@@ -42,3 +42,7 @@ CREATE TABLE "incometypes" (
 )
 ;
 
+
+INSERT INTO "accountbal" ("id", "balance", "datemodified", "modifiedby", "lastledgerref", "currency") VALUES (2, 0.0, '2024-12-18 12:51:35', 'root', 0, 'ZWG');
+INSERT INTO "accountbal" ("id", "balance", "datemodified", "modifiedby", "lastledgerref", "currency") VALUES (1, 0.0, '2024-12-18 12:24:04', 'root', 0, 'USD');
+
