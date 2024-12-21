@@ -15,14 +15,45 @@ def api_docs():
 
 
 
-#   --> Configurations <--
+#   --> Required Methods <--
 
 def open_db():
-    dbFile = Path('static/fundstracker.db')
+    # dbFile = Path('static/fundstracker.db') # dev env
+    dbFile = Path('static/myfundstracker.db') # pdn env
     con = sqlite3.connect(str(dbFile))
 
     return con
 
+def getIncomeTypeByRef(ref):
+    # open db connection, insert data and get the record
+    dbCon = open_db();
+    dbCon.row_factory = sqlite3.Row
+
+    cur = dbCon.cursor().execute(f"SELECT * FROM incometypes WHERE id = {ref}")
+    recs = cur.fetchall()
+    record = dict(recs[0]) if recs.__len__() > 0 else []
+
+    # close db connection
+    dbCon.close()
+
+    return record
+
+def getExpenseTypeByRef(ref):
+    # open db connection, insert data and get the record
+    dbCon = open_db();
+    dbCon.row_factory = sqlite3.Row
+
+    cur = dbCon.cursor().execute(f"SELECT * FROM expensetypes WHERE id = {ref}")
+    recs = cur.fetchall()
+    record = dict(recs[0]) if recs.__len__() > 0 else []
+
+    # close db connection
+    dbCon.close()
+
+    return record
+
+
+#   --> Configurations <--
 
 @app.route("/config/income", methods = ['GET', 'POST','PUT'])
 def incomeConfig():
@@ -68,7 +99,7 @@ def incomeConfig():
         with dbCon:
             cur = dbCon.cursor()
             try:
-                cur.execute("SELECT * FROM incometypes")
+                cur.execute("SELECT * FROM incometypes WHERE status = 'active'")
                 rows = cur.fetchall()
 
                 response = [dict(r) for r in rows]
@@ -113,6 +144,20 @@ def incomeConfig():
     else:
         return f'Un-implemented request method: {mode}', 405
 
+@app.route("/config/income/delete/<int:ref>", methods = ['DELETE'])
+def deleteIncomeTyp(ref):
+    # validate for nulls 
+    if(ref == ''):
+        return 'Bad Request: Missing required fields.', 400
+    
+    # open db connection, insert data and get the record
+    dbCon = open_db();
+    dbCon.row_factory = sqlite3.Row
+    sql = f"UPDATE incometypes SET status = 'deleted' WHERE id = {ref}"
+    dbCon.cursor().execute(sql)
+    dbCon.commit()
+
+    return 'Income Type Deleted', 200
 
 @app.route("/config/expense", methods = ['GET', 'POST','PUT'])
 def expenseConfig():
@@ -158,7 +203,7 @@ def expenseConfig():
         with dbCon:
             cur = dbCon.cursor()
             try:
-                cur.execute("SELECT * FROM expensetypes")
+                cur.execute("SELECT * FROM expensetypes WHERE status = 'active'")
                 rows = cur.fetchall()
 
                 response = [dict(r) for r in rows]
@@ -203,6 +248,20 @@ def expenseConfig():
     else:
         return f'Un-implemented request method: {mode}', 405
 
+@app.route("/config/expense/delete/<int:ref>", methods = ['DELETE'])
+def deleteExpenseTyp(ref):
+    # validate for nulls 
+    if(ref == ''):
+        return 'Bad Request: Missing required fields.', 400
+    
+    # open db connection, insert data and get the record
+    dbCon = open_db();
+    dbCon.row_factory = sqlite3.Row
+    sql = f"UPDATE expensetypes SET status = 'deleted' WHERE id = {ref}"
+    dbCon.cursor().execute(sql)
+    dbCon.commit()
+
+    return 'Expense Type Deleted', 200
 
 #   --> acount transactions <--
 
@@ -219,6 +278,11 @@ def accountTransact():
     if(typ == '' or typref == '' or amount == '' or currency == ''):
         return 'Bad Request: Missing required fields.', 400
     
+    # validate type ref
+    theTyp = getIncomeTypeByRef(typref) if (typ == 'IN') else getExpenseTypeByRef(typref)
+    if(theTyp.__len__() == 0):
+        return 'Bad Request: Type Ref invalid: ' + str(typref), 400
+
     # create required variables
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     details = ( typ, typref, amount, 'active', now, '-', currency)
