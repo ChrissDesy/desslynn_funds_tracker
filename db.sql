@@ -6,8 +6,7 @@ CREATE TABLE "accountbal" (
 	"lastledgerref" INTEGER NOT NULL,
 	"currency" CHAR(3) NOT NULL,
 	PRIMARY KEY ("id")
-)
-;
+);
 
 CREATE TABLE "accountledger" (
 	"id" INTEGER NOT NULL,
@@ -19,8 +18,7 @@ CREATE TABLE "accountledger" (
 	"modifiedby" VARCHAR(50) NOT NULL,
 	"currency" CHAR(3) NOT NULL,
 	PRIMARY KEY ("id")
-)
-;
+);
 
 CREATE TABLE "expensetypes" (
 	"id" INTEGER NOT NULL,
@@ -29,8 +27,7 @@ CREATE TABLE "expensetypes" (
 	"description" VARCHAR(250) NULL,
 	"datecreated" DATE NULL,
 	PRIMARY KEY ("id")
-)
-;
+);
 
 CREATE TABLE "incometypes" (
 	"id" INTEGER NOT NULL,
@@ -39,10 +36,9 @@ CREATE TABLE "incometypes" (
 	"description" VARCHAR(250) NULL,
 	"datecreated" DATE NULL,
 	PRIMARY KEY ("id")
-)
-;
+);
 
 
-INSERT INTO "accountbal" ("id", "balance", "datemodified", "modifiedby", "lastledgerref", "currency") VALUES (2, 0.0, '2024-12-18 12:51:35', 'root', 0, 'ZWG');
-INSERT INTO "accountbal" ("id", "balance", "datemodified", "modifiedby", "lastledgerref", "currency") VALUES (1, 0.0, '2024-12-18 12:24:04', 'root', 0, 'USD');
+INSERT INTO "accountbal" ("id", "balance", "datemodified", "modifiedby", "lastledgerref", "currency") VALUES (2, 0.0, 'NOW()', 'root', 0, 'ZWG');
+INSERT INTO "accountbal" ("id", "balance", "datemodified", "modifiedby", "lastledgerref", "currency") VALUES (1, 0.0, 'NOW()', 'root', 0, 'USD');
 

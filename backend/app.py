@@ -18,8 +18,8 @@ def api_docs():
 #   --> Required Methods <--
 
 def open_db():
-    # dbFile = Path('static/fundstracker.db') # dev env
-    dbFile = Path('static/myfundstracker.db') # pdn env
+    dbFile = Path('static/fundstracker.db') # dev env
+    # dbFile = Path('static/myfundstracker.db') # pdn env
     con = sqlite3.connect(str(dbFile))
 
     return con
