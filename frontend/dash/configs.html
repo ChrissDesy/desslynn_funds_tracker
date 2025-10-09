@@ -351,11 +351,49 @@
 
                                         <div class="tab-content">
                                             <div class="tab-pane show active" id="home-b2">
-                                                <div class="mb-2">Incomes</div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <h4 class="mb-2 pt-2">Incomes</h4>
+                                                    </div>
+                                                    <div class="col-md-6 mb-2">
+                                                        <button type="button" class="btn btn-outline-success btn-rounded btn-sm float-end"
+                                                         data-bs-toggle="modal" data-bs-target="#income-add">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="table-responsive">
+                                                    <table class="table">
+                                                        <thead class="bg-primary text-white">
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>Name</th>
+                                                                <th>Description</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody class="border border-primary" id="tBodyIncomes"></tbody>
+                                                    </table>
+                                                </div>
                                             </div>
+
                                             <div class="tab-pane" id="profile-b2">
-                                                <div class="mb-2">Expenses</div>
+                                                <h4 class="mb-2">Expenses</h4>
+                                                <div class="table-responsive">
+                                                    <table class="table">
+                                                        <thead class="bg-primary text-white">
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>Name</th>
+                                                                <th>Description</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody class="border border-primary" id="tBodyExpenses"></tbody>
+                                                    </table>
+                                                </div>
                                             </div>
+
                                             <div class="tab-pane" id="settings-b2">
                                                 <h4 class="mb-2">Accounts</h4>
                                                 <div class="table-responsive">
@@ -370,16 +408,7 @@
                                                                 <th>User</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody class="border border-primary">
-                                                            <tr>
-                                                                <td>1</td>
-                                                                <td>Nigam</td>
-                                                                <td>$50</td>
-                                                                <td>4</td>
-                                                                <td>2025-10-06</td>
-                                                                <td>@Sonu</td>
-                                                            </tr>
-                                                        </tbody>
+                                                        <tbody class="border border-primary" id="tBodyAccounts"></tbody>
                                                     </table>
                                                 </div>
                                             </div>
@@ -431,7 +460,48 @@
     <script src="../assets/js/toastr.min.js"></script>
     <!--This page JavaScript -->
 
-    <script src="../controller/apiEngine.js"></script>
+    <script src="../controller/configsModule.js" type="module"></script>
+
+    <!-- Modals -->
+    <div class="modal fade" id="income-add" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myCenterModalLabel">Add Income Type</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>Fill in income type details.</h5>
+                    <form id="incomeAdd">
+                        <div class="row">
+                            <div class="col-12 mb-2">
+                                <div class="form-group">
+                                    <label for="name1">Name</label>
+                                    <input type="text" id="name1" class="form-control" placeholder="Name" >
+                                </div>
+                            </div>
+                            <div class="col-12 mb-2">
+                                <div class="form-group">
+                                    <label for="description1">Description</label>
+                                    <textarea id="description1" class="form-control" rows="3" placeholder="Type here..." ></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <br><br>
+                        <div class="text-center">
+                            <button type="submit" id="incomeaddBtn" class="btn btn-sm btn-outline-primary btn-rounded">
+                                <i class="fas fa-save"></i> Save
+                            </button>
+                            <button type="button" data-bs-dismiss="modal" class="btn btn-sm btn-outline-secondary btn-rounded">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
 </body>
 

@@ -1,9 +1,11 @@
 from flask import Flask, request
+from flask_cors import CORS
 import sqlite3
 from pathlib import Path
 from datetime import datetime
 
 app = Flask(__name__)
+CORS(app) # enable cors for all routes
 
 @app.route("/")
 def index():
