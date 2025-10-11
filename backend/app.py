@@ -146,6 +146,18 @@ def incomeConfig():
     else:
         return f'Un-implemented request method: {mode}', 405
 
+@app.route("/config/income/<int:ref>", methods = ['GET'])
+def incomeTyp(ref):
+    # validate for nulls 
+    if(ref == ''):
+        return 'Bad Request: Missing required fields.', 400
+    
+    # get the typ
+    record = getIncomeTypeByRef(ref);
+    
+
+    return record, 200
+
 @app.route("/config/income/delete/<int:ref>", methods = ['DELETE'])
 def deleteIncomeTyp(ref):
     # validate for nulls 
@@ -249,6 +261,18 @@ def expenseConfig():
 
     else:
         return f'Un-implemented request method: {mode}', 405
+
+@app.route("/config/expense/<int:ref>", methods = ['GET'])
+def expenseTyp(ref):
+    # validate for nulls 
+    if(ref == ''):
+        return 'Bad Request: Missing required fields.', 400
+    
+    # get the typ
+    record = getExpenseTypeByRef(ref);
+    
+
+    return record, 200
 
 @app.route("/config/expense/delete/<int:ref>", methods = ['DELETE'])
 def deleteExpenseTyp(ref):
@@ -372,6 +396,33 @@ def accountBalances():
         cur = dbCon.cursor()
         try:
             cur.execute(f"SELECT * FROM accountbal")
+            rows = cur.fetchall()
+
+            response = [dict(r) for r in rows]
+        except Exception as ex:
+            return f'Internal Server Error: {ex.args}', 500
+    
+    # close db connection
+    dbCon.close();
+
+    return response, 200
+
+#   --> reports & statistics <--
+
+@app.route("/configs/statistics", methods = ['GET'])
+def configsStatistics():
+    # open db connection
+    dbCon = open_db();
+    dbCon.row_factory = sqlite3.Row
+    response = None
+
+    # retrive the data
+    with dbCon:
+        cur = dbCon.cursor()
+        try:
+            cur.execute(f"SELECT " +
+                    "(SELECT COUNT(*) FROM incometypes WHERE status = 'active') AS incometypes," +
+                    "(SELECT COUNT(*) FROM expensetypes WHERE status = 'active') AS expensetypes")
             rows = cur.fetchall()
 
             response = [dict(r) for r in rows]

@@ -277,7 +277,7 @@
                                 <div class="d-flex align-items-center">
                                     <div>
                                         <div class="d-inline-flex align-items-center">
-                                            <h2 class="text-dark mb-1 font-weight-medium">0</h2>
+                                            <h2 class="text-dark mb-1 font-weight-medium" id="incomeTypes">0</h2>
                                         </div>
                                         <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Income Types
                                         </h6>
@@ -294,7 +294,7 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
                                     <div>
-                                        <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium">0</h2>
+                                        <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium" id="expenseTypes">0</h2>
                                         <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Expenses Types
                                         </h6>
                                     </div>
@@ -378,7 +378,17 @@
                                             </div>
 
                                             <div class="tab-pane" id="profile-b2">
-                                                <h4 class="mb-2">Expenses</h4>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <h4 class="mb-2 pt-2">Expenses</h4>
+                                                    </div>
+                                                    <div class="col-md-6 mb-2">
+                                                        <button type="button" class="btn btn-outline-success btn-rounded btn-sm float-end"
+                                                            data-bs-toggle="modal" data-bs-target="#expense-add">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
                                                 <div class="table-responsive">
                                                     <table class="table">
                                                         <thead class="bg-primary text-white">
@@ -490,8 +500,130 @@
                         </div>
                         <br><br>
                         <div class="text-center">
-                            <button type="submit" id="incomeaddBtn" class="btn btn-sm btn-outline-primary btn-rounded">
+                            <button type="submit" class="btn btn-sm btn-outline-primary btn-rounded">
                                 <i class="fas fa-save"></i> Save
+                            </button>
+                            <button type="button" data-bs-dismiss="modal" class="btn btn-sm btn-outline-secondary btn-rounded">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="income-edit" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myCenterModalLabel">Update Income Type</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>Update income type details.</h5>
+                    <form id="incomeUpdate">
+                        <div class="row">
+                            <div class="col-12 mb-2">
+                                <div class="form-group">
+                                    <label for="name2">Name</label>
+                                    <input type="text" id="name2" class="form-control" placeholder="Name" >
+                                    <input type="text" id="ref2" placeholder="Id" hidden>
+                                </div>
+                            </div>
+                            <div class="col-12 mb-2">
+                                <div class="form-group">
+                                    <label for="description2">Description</label>
+                                    <textarea id="description2" class="form-control" rows="3" placeholder="Type here..." ></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <br><br>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-sm btn-outline-primary btn-rounded">
+                                <i class="fas fa-save"></i> Update
+                            </button>
+                            <button type="button" data-bs-dismiss="modal" class="btn btn-sm btn-outline-secondary btn-rounded">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="expense-add" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myCenterModalLabel">Add Expense Type</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>Fill in expense type details.</h5>
+                    <form id="expenseAdd">
+                        <div class="row">
+                            <div class="col-12 mb-2">
+                                <div class="form-group">
+                                    <label for="name3">Name</label>
+                                    <input type="text" id="name3" class="form-control" placeholder="Name" >
+                                </div>
+                            </div>
+                            <div class="col-12 mb-2">
+                                <div class="form-group">
+                                    <label for="description3">Description</label>
+                                    <textarea id="description3" class="form-control" rows="3" placeholder="Type here..." ></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <br><br>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-sm btn-outline-primary btn-rounded">
+                                <i class="fas fa-save"></i> Save
+                            </button>
+                            <button type="button" data-bs-dismiss="modal" class="btn btn-sm btn-outline-secondary btn-rounded">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="expense-edit" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myCenterModalLabel">Update Expense Type</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>Update expense type details.</h5>
+                    <form id="expenseUpdate">
+                        <div class="row">
+                            <div class="col-12 mb-2">
+                                <div class="form-group">
+                                    <label for="name4">Name</label>
+                                    <input type="text" id="name4" class="form-control" placeholder="Name" >
+                                    <input type="text" id="ref4" placeholder="Id" hidden>
+                                </div>
+                            </div>
+                            <div class="col-12 mb-2">
+                                <div class="form-group">
+                                    <label for="description4">Description</label>
+                                    <textarea id="description4" class="form-control" rows="3" placeholder="Type here..." ></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <br><br>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-sm btn-outline-primary btn-rounded">
+                                <i class="fas fa-save"></i> Update
                             </button>
                             <button type="button" data-bs-dismiss="modal" class="btn btn-sm btn-outline-secondary btn-rounded">
                                 <i class="fas fa-times"></i> Cancel

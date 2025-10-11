@@ -100,7 +100,7 @@ export async function createIncomeType(data){
 
 }
 
-async function updateIncomeType(data){
+export async function updateIncomeType(data){
     
     if(!data)
         return 400;
@@ -121,6 +121,18 @@ export async function getAllIncomeTypes(){
 
 }
 
+export async function getIncomeTypeByRef(ref){
+    
+    if(!ref)
+        return 400;
+
+    let resp = await makeAjaxRequest(`config/income/${ref}`, 'GET');
+
+    // console.log(resp);
+    return resp;
+
+}
+
 export async function deleteIncomeType(ref){
     
     if(!ref)
@@ -134,7 +146,7 @@ export async function deleteIncomeType(ref){
 }
 
 // expense types
-async function createExpenseType(data){
+export async function createExpenseType(data){
     
     if(!data)
         return 400;
@@ -146,7 +158,7 @@ async function createExpenseType(data){
 
 }
 
-async function updateExpenseType(data){
+export async function updateExpenseType(data){
     
     if(!data)
         return 400;
@@ -167,7 +179,19 @@ export async function getAllExpenseTypes(){
 
 }
 
-async function deleteExpenseType(ref){
+export async function getExpenseTypeByRef(ref){
+    
+    if(!ref)
+        return 400;
+
+    let resp = await makeAjaxRequest(`config/expense/${ref}`, 'GET');
+
+    // console.log(resp);
+    return resp;
+
+}
+
+export async function deleteExpenseType(ref){
     
     if(!ref)
         return 400;
@@ -178,3 +202,15 @@ async function deleteExpenseType(ref){
     return resp;
 
 }
+
+
+// get config statistics
+export async function getConfigsStatistics(){
+    
+    let resp = await makeAjaxRequest(`configs/statistics`, 'GET');
+
+    // console.log(resp);
+    return resp;
+
+}
+
