@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_cors import CORS
 import sqlite3
+import math
 from pathlib import Path
 from datetime import datetime
 
@@ -344,15 +345,28 @@ def allTransactions(page, size):
     dbCon = open_db();
     dbCon.row_factory = sqlite3.Row
     response = None
+    totalItems = None
+
+    offset = (page * size);
 
     # retrive the data
     with dbCon:
         cur = dbCon.cursor()
         try:
-            cur.execute(f"SELECT * FROM accountledger ORDER BY datecreated DESC LIMIT {page}, {size}")
+
+            cur.execute(f"SELECT count(*) FROM accountledger")
+            totalItems = cur.fetchone()[0]
+        
+            cur.execute(f"SELECT * FROM accountledger ORDER BY datecreated DESC LIMIT {size} OFFSET {offset}")
             rows = cur.fetchall()
 
-            response = [dict(r) for r in rows]
+            response = {
+                'page': page,
+                'size': size,
+                'data': [dict(r) for r in rows],
+                'total_items': totalItems,
+                'total_pages': math.ceil((totalItems / size))
+            }
         except Exception as ex:
             return f'Internal Server Error: {ex.args}', 500
     
@@ -367,12 +381,90 @@ def allTransactionsByType(typ, page, size):
     dbCon = open_db();
     dbCon.row_factory = sqlite3.Row
     response = None
+    totalItems = None
+
+    offset = (page * size);
 
     # retrive the data
     with dbCon:
         cur = dbCon.cursor()
         try:
-            cur.execute(f"SELECT * FROM accountledger WHERE type='{typ}' ORDER BY datecreated DESC LIMIT {page}, {size}")
+            cur.execute(f"SELECT count(*) FROM accountledger WHERE type='{typ}'")
+            totalItems = cur.fetchone()[0]
+
+            cur.execute(f"SELECT * FROM accountledger WHERE type='{typ}' ORDER BY datecreated DESC LIMIT {size} OFFSET {offset}")
+            rows = cur.fetchall()
+
+            esponse = {
+                'page': page,
+                'size': size,
+                'data': [dict(r) for r in rows],
+                'total_items': totalItems,
+                'total_pages': math.ceil((totalItems / size))
+            }
+        except Exception as ex:
+            return f'Internal Server Error: {ex.args}', 500
+    
+    # close db connection
+    dbCon.close();
+
+    return response, 200
+
+@app.route("/transactions/by-currency/<string:curr>/<int:page>/<int:size>", methods = ['GET'])
+def allTransactionsByCurrency(curr, page, size):
+    # open db connection
+    dbCon = open_db();
+    dbCon.row_factory = sqlite3.Row
+    response = None
+    totalItems = None
+
+    offset = (page * size);
+
+    # retrive the data
+    with dbCon:
+        cur = dbCon.cursor()
+        try:
+            cur.execute(f"SELECT count(*) FROM accountledger WHERE currency='{curr}'")
+            totalItems = cur.fetchone()[0]
+
+            cur.execute(f"SELECT * FROM accountledger WHERE currency='{curr}' ORDER BY datecreated DESC LIMIT {size} OFFSET {offset}")
+            rows = cur.fetchall()
+
+            esponse = {
+                'page': page,
+                'size': size,
+                'data': [dict(r) for r in rows],
+                'total_items': totalItems,
+                'total_pages': math.ceil((totalItems / size))
+            }
+        except Exception as ex:
+            return f'Internal Server Error: {ex.args}', 500
+    
+    # close db connection
+    dbCon.close();
+
+    return response, 200
+
+@app.route("/transactions/by-ref/<string:typ>/<int:ref>", methods = ['GET'])
+def getTransactionDetail(typ, ref):
+    # open db connection
+    dbCon = open_db();
+    dbCon.row_factory = sqlite3.Row
+    response = None
+
+    # retrive the data
+    with dbCon:
+        cur = dbCon.cursor()
+        try:
+            if(typ == 'IN'):
+                cur.execute(f"SELECT accountledger.id, accountledger.datecreated, TYPE, name, description, currency, amount, modifiedby " + 
+                            "FROM accountledger LEFT JOIN incometypes ON accountledger.typeref = incometypes.id " +
+                            "WHERE accountledger.id = " + str(ref))
+            else:
+                cur.execute(f"SELECT a.id, a.datecreated, TYPE, name, description, currency, amount, modifiedby " + 
+                            "FROM accountledger as a LEFT JOIN expensetypes as b ON a.typeref = b.id " +
+                            "WHERE a.id = " + str(ref))
+            
             rows = cur.fetchall()
 
             response = [dict(r) for r in rows]
@@ -383,6 +475,7 @@ def allTransactionsByType(typ, page, size):
     dbCon.close();
 
     return response, 200
+
 
 @app.route("/account/balances", methods = ['GET'])
 def accountBalances():

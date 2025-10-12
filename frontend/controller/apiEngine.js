@@ -63,9 +63,21 @@ async function getTransactionsByType(typ, page, size){
 
 }
 
-async function getAllTransactions(page, size){
+async function getTransactionsByCurrency(curr, page, size){
     
-    if(!page || !size)
+    if(!curr || !page || !size)
+        return 400;
+
+    let resp = await makeAjaxRequest(`transactions/by-currency/${curr}/${page}/${size}`, 'GET');
+
+    // console.log(resp);
+    return resp;
+
+}
+
+export async function getAllTransactions(page, size){
+    
+    if(page == undefined || !size)
         return 400;
 
     let resp = await makeAjaxRequest(`transactions/all/${page}/${size}`, 'GET');
@@ -75,7 +87,19 @@ async function getAllTransactions(page, size){
 
 }
 
-async function createTransaction(data){
+export async function getTransactionDetails(ref){
+    
+    if(!ref)
+        return 400;
+
+    let resp = await makeAjaxRequest(`transactions/by-ref/${ref}`, 'GET');
+
+    // console.log(resp);
+    return resp;
+
+}
+
+export async function createTransaction(data){
     
     if(!data)
         return 400;
