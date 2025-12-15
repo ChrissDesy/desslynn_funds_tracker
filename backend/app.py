@@ -323,9 +323,9 @@ def accountTransact():
     recRef = cur.lastrowid
 
     # alter balances accordingly
-    theAmount = amount if (typ == 'IN') else (amount * -1)
+    theAmount = amount if (typ == 'IN') else (int(amount) * -1)
     query = f"UPDATE accountbal SET balance = balance + {theAmount}, lastledgerref = {recRef} WHERE currency = '{currency}'"
-    # print(query)
+    print(query)
     cur = dbCon.cursor().execute(query)
     dbCon.commit()
 

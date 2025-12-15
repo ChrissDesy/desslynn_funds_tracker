@@ -161,6 +161,13 @@ async function createNewIncomeType(){
 
             engine.showAlert('success', 'Income Type Created.', 'Request Success');
 
+             // hide modal
+            $('#income-add').modal('hide');
+
+            // clear form
+            $('#name1').val('');
+            $('#description1').val('');
+
             getIncomeTypes();
 
             return false;
@@ -379,6 +386,13 @@ async function createNewExpenseType(){
             }
 
             engine.showAlert('success', 'Expense Type Created.', 'Request Success');
+
+             // hide modal
+            $('#expense-add').modal('hide');
+
+            // clear form
+            $('#name1').val('');
+            $('#description1').val('');
 
             getExpenseTypes();
 

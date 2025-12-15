@@ -159,6 +159,17 @@ async function createNewTransaction(){
 
             engine.showAlert('success', 'New Transaction Created.', 'Request Success');
 
+            // hide modal
+            $('#txn-add').modal('hide');
+
+            // clear form
+            $('#category').val('');
+            $('#type').val('');
+            $('#currency').val('');
+            $('#amount').val('');
+
+            // get transactions
+            page = 0;
             getAllTransations();
 
             return false;
