@@ -239,3 +239,14 @@ export async function getConfigsStatistics(){
 
 }
 
+// get tran statistics
+export async function getTransactionsStatistics(){
+    
+    let resp = await makeAjaxRequest(`transactions/statistics`, 'GET');
+
+    // console.log(resp);
+    return resp;
+
+}
+
+

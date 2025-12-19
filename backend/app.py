@@ -527,4 +527,40 @@ def configsStatistics():
 
     return response, 200
 
+@app.route("/transactions/statistics", methods = ['GET'])
+def tranStatistics():
+    # open db connection
+    dbCon = open_db();
+    dbCon.row_factory = sqlite3.Row
+    response = None
+
+    # retrive the data
+    with dbCon:
+        cur = dbCon.cursor()
+        try:
+            cur.execute(f"SELECT MAX(amount) AS amt, currency, e.name FROM accountledger " +
+                        "LEFT JOIN expensetypes e ON accountledger.typeref = e.id " +
+                        "WHERE accountledger.TYPE = 'EX' AND STRFTIME('%m', accountledger.datecreated) = STRFTIME('%m', DATE()) GROUP BY currency")
+            rows = cur.fetchall()
+
+            resp1 = [dict(r) for r in rows]
+
+            cur.execute(f"SELECT accountledger.TYPE, sum(amount) AS amt, currency FROM accountledger WHERE STRFTIME('%m', datecreated) = STRFTIME('%m', DATE()) GROUP BY accountledger.TYPE, currency")
+            rows = cur.fetchall()
+
+            resp2 = [dict(r) for r in rows]
+
+            response = {
+                'expenses': resp1,
+                'totals': resp2
+            }
+
+        except Exception as ex:
+            return f'Internal Server Error: {ex.args}', 500
+    
+    # close db connection
+    dbCon.close();
+
+    return response, 200
+
 
