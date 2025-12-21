@@ -8,8 +8,6 @@ async function tranStatistics(){
 
     let data = await engine.getTransactionsStatistics();
     
-    console.log(data);
-    
     // monthly stats
     let exu, exz, inu, inz;    
 
@@ -34,7 +32,7 @@ async function tranStatistics(){
     if(data.expenses){
         data.expenses.forEach(r => {
             $(`#expa${r.currency}`).html(r.amt);
-            $(`#expt${r.currency}`).html(r.name);
+            $(`#expt${r.currency}`).html(r.name ? r.name : '.');
         });
     }
 
