@@ -7,16 +7,16 @@ async function tranStatistics(){
     let data = await engine.getTransactionsStatistics();
     
     // monthly stats
-    let exu, exz, inu, inz;    
+    let exu = 0, exz = 0, inu = 0, inz = 0;    
 
     if(data.totals){
 
         data.totals.forEach(r => {
             if(r.currency == 'USD'){
-                r.type == 'EX' ? exu = r.amt : inu = r.amt;
+                r.type == 'EX' ? exu = r.amt ? r.amt : 0 : inu = r.amt ? r.amt : 0;
             }
             else if(r.currency == 'ZWG'){
-                r.type == 'EX' ? exz = r.amt : inz = r.amt;
+                r.type == 'EX' ? exz = r.amt ? r.amt : 0 : inz = r.amt ? r.amt : 0;
             }
         });
 

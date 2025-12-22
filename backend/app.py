@@ -16,13 +16,32 @@ def index():
 def api_docs():
     return "<h3>API Documentation</h3>"
 
+@app.route("/api/auth/login", methods= ['POST'])
+def authLogin():
+    content = request.get_json() # get request data
+
+    uname = content.get('uname','')
+    pwd = content.get('pwd','')
+
+    # validate for nulls 
+    if(uname == '' or pwd == ''):
+        return 'Bad Request: Missing required fields.', 400
+    
+    if(pwd != 'Desslynn2026!'):
+        return 'Invalid credentials.', 401
+    
+    response = {
+        'username': uname
+    }
+
+    return response, 200
 
 
 #   --> Required Methods <--
 
 def open_db():
-    dbFile = Path('static/fundstracker.db') # dev env
-    # dbFile = Path('static/myfundstracker.db') # pdn env
+    # dbFile = Path('static/fundstracker.db') # dev env
+    dbFile = Path('static/myfundstracker.db') # pdn env
     con = sqlite3.connect(str(dbFile))
 
     return con
@@ -300,9 +319,10 @@ def accountTransact():
     typref = content.get('typeref','')
     amount = content.get('amount','')
     currency = content.get('currency','')
+    user = content.get('user','')
 
     # validate for nulls 
-    if(typ == '' or typref == '' or amount == '' or currency == ''):
+    if(typ == '' or typref == '' or amount == '' or currency == '' or user == ''):
         return 'Bad Request: Missing required fields.', 400
     
     # validate type ref
@@ -312,7 +332,7 @@ def accountTransact():
 
     # create required variables
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    details = ( typ, typref, amount, 'active', now, '-', currency)
+    details = ( typ, typref, amount, 'active', now, user, currency)
 
     # open db connection, insert data and get the record
     dbCon = open_db();
@@ -540,12 +560,12 @@ def tranStatistics():
         try:
             cur.execute(f"SELECT MAX(amount) AS amt, currency, e.name FROM accountledger " +
                         "LEFT JOIN expensetypes e ON accountledger.typeref = e.id " +
-                        "WHERE accountledger.TYPE = 'EX' AND STRFTIME('%m', accountledger.datecreated) = STRFTIME('%m', DATE()) GROUP BY currency")
+                        "WHERE accountledger.TYPE = 'EX' AND STRFTIME('%Y-%m', accountledger.datecreated) = STRFTIME('%Y-%m', DATE()) GROUP BY currency")
             rows = cur.fetchall()
 
             resp1 = [dict(r) for r in rows]
 
-            cur.execute(f"SELECT accountledger.TYPE, sum(amount) AS amt, currency FROM accountledger WHERE STRFTIME('%m', datecreated) = STRFTIME('%m', DATE()) GROUP BY accountledger.TYPE, currency")
+            cur.execute(f"SELECT accountledger.TYPE, sum(amount) AS amt, currency FROM accountledger WHERE STRFTIME('%Y-%m', datecreated) = STRFTIME('%Y-%m', DATE()) GROUP BY accountledger.TYPE, currency")
             rows = cur.fetchall()
 
             resp2 = [dict(r) for r in rows]

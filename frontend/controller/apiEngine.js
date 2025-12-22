@@ -1,6 +1,6 @@
 
-let baseURL = 'http://127.0.0.1:5000/';
-// let baseURL = 'https://desslynn-funds-tracker.onrender.com/';
+// let baseURL = 'http://127.0.0.1:5000/';
+let baseURL = 'https://desslynn-funds-tracker.onrender.com/';
 
 // alerts
 export function showAlert(typ, msg, title){
@@ -45,6 +45,16 @@ async function makeAjaxRequest(url, method, data){
 export async function getAccountBalances(){
     
     let resp = await makeAjaxRequest('account/balances', 'GET');
+
+    // console.log(resp);
+    return resp;
+
+}
+
+// dummy endpoint to start api service
+export function makeDummyRequest(){
+    
+    let resp = makeAjaxRequest(``, 'GET');
 
     // console.log(resp);
     return resp;
@@ -243,6 +253,19 @@ export async function getConfigsStatistics(){
 export async function getTransactionsStatistics(){
     
     let resp = await makeAjaxRequest(`transactions/statistics`, 'GET');
+
+    // console.log(resp);
+    return resp;
+
+}
+
+// auth login
+export async function authLogin(data){
+    
+    if(!data)
+        return 400;
+
+    let resp = await makeAjaxRequest(`api/auth/login`, 'POST', data);
 
     // console.log(resp);
     return resp;

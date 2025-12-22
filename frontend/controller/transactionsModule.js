@@ -9,16 +9,16 @@ async function tranStatistics(){
     let data = await engine.getTransactionsStatistics();
     
     // monthly stats
-    let exu, exz, inu, inz;    
+    let exu = 0, exz = 0, inu = 0, inz = 0;      
 
     if(data.totals){
 
         data.totals.forEach(r => {
             if(r.currency == 'USD'){
-                r.type == 'EX' ? exu = r.amt : inu = r.amt;
+                r.type == 'EX' ? exu = r.amt ? r.amt : 0 : inu = r.amt ? r.amt : 0;
             }
             else if(r.currency == 'ZWG'){
-                r.type == 'EX' ? exz = r.amt : inz = r.amt;
+                r.type == 'EX' ? exz = r.amt ? r.amt : 0 : inz = r.amt ? r.amt : 0;
             }
         });
 
@@ -180,7 +180,8 @@ async function createNewTransaction(){
         type: typ,
         typeref: ref,
         currency: curr,
-        amount: amt
+        amount: amt,
+        user: sessionStorage.getItem('auth')
     };
 
     await engine.createTransaction(data).then(
@@ -206,6 +207,8 @@ async function createNewTransaction(){
             // get transactions
             page = 0;
             getAllTransations();
+
+            tranStatistics();
 
             return false;
         }        

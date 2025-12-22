@@ -15,10 +15,8 @@
     <link href="./assets/css/style.min.css" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
+    
+    <link href="../assets/css/toastr.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -38,37 +36,36 @@
         <!-- ============================================================== -->
         <!-- Login box.scss -->
         <!-- ============================================================== -->
-        <div class="auth-wrapper d-flex no-block justify-content-center align-items-center position-relative"
-            style="background:url(../assets/images/big/auth-bg.jpg) no-repeat center center;">
-            <div class="auth-box row">
-                <div class="col-lg-5 col-md-7 bg-white">
+        <div class="auth-wrapper d-flex no-block justify-content-center align-items-center position-relative">
+            <div class="auth-box row" style="max-width: 450px;">
+                <div class="bg-white">
                     <div class="p-3">
                         <div class="text-center">
                             <img src="./assets/images/freedashDark.svg" alt="wrapkit">
                         </div>
                         <h2 class="mt-3 text-center">Sign In</h2>
-                        <p class="text-center">Enter your email address and password to access admin panel.</p>
-                        <form class="mt-4">
+                        <p class="text-center">Enter your username and password to access admin panel.</p>
+                        <form class="mt-4" id="frmLogin">
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="form-group mb-3">
                                         <label class="form-label text-dark" for="uname">Username</label>
                                         <input class="form-control" id="uname" type="text"
-                                            placeholder="enter your username">
+                                            placeholder="enter your username" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group mb-3">
                                         <label class="form-label text-dark" for="pwd">Password</label>
                                         <input class="form-control" id="pwd" type="password"
-                                            placeholder="enter your password">
+                                            placeholder="enter your password" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-12 text-center">
                                     <button type="submit" class="btn w-100 btn-dark">Sign In</button>
                                 </div>
                                 <div class="col-lg-12 text-center mt-5">
-                                    Don't have an account? <a href="#" class="text-danger">Sign Up</a>
+                                    <!-- Don't have an account? <a href="#" class="text-danger">Sign Up</a> -->
                                 </div>
                             </div>
                         </form>
@@ -85,13 +82,15 @@
     <!-- ============================================================== -->
     <script src="../assets/libs/jquery/dist/jquery.min.js "></script>
     <!-- Bootstrap tether Core JavaScript -->
-    <script src="../assets/libs/popper.js/dist/umd/popper.min.js "></script>
     <script src="../assets/libs/bootstrap/dist/js/bootstrap.min.js "></script>
     <!-- ============================================================== -->
     <!-- This page plugin js -->
     <!-- ============================================================== -->
+     <script src="../assets/js/toastr.min.js"></script>
+    <script type="module" src="./controller/authModule.js"></script>
     <script>
         $(".preloader ").fadeOut();
+
     </script>
 </body>
 
