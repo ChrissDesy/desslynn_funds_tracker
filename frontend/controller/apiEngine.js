@@ -32,7 +32,7 @@ async function makeAjaxRequest(url, method, data){
         },
         error: function(err){
             console.log(err);
-            showAlert('error', `${err.statusText}: ${err.status}`);
+            showAlert('error', `${err.responseText}: ${err.status}`, 'Request Failed');
             return null;
         }
     });

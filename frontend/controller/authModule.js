@@ -31,10 +31,11 @@ async function login(){
 
             window.location.href = './dash/home.html';
         }        
-    ).catch(
+    )
+    .catch(
         err => {
-            console.error(err);
-            engine.showAlert('error', err?.statusText + ': ' + err.status, 'Request Failed');
+            // console.error(err);
+            // engine.showAlert('error', err?.statusText + ': ' + err.status, 'Request Failed');
 
             return false;
         }

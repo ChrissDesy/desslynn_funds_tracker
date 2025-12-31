@@ -247,7 +247,13 @@ async function updateIncomeType(){
                 return;
             }
 
+            $('#income-edit').modal('hide');
+
             engine.showAlert('success', 'Income Type Updated.', 'Request Success');
+
+            $('#ref2').val('');
+            $('#name2').val('');
+            $('#description2').val('');
 
             getIncomeTypes();
 
@@ -474,6 +480,12 @@ async function updateExpenseType(){
             }
 
             engine.showAlert('success', 'Expense Type Updated.', 'Request Success');
+
+            $('#expense-edit').modal('hide');
+
+            $('#ref4').val('');
+            $('#name4').val('');
+            $('#description4').val('');
 
             getIncomeTypes();
 
