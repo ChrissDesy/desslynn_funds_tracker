@@ -397,8 +397,8 @@ async function createNewExpenseType(){
             $('#expense-add').modal('hide');
 
             // clear form
-            $('#name1').val('');
-            $('#description1').val('');
+            $('#name3').val('');
+            $('#description3').val('');
 
             getExpenseTypes();
 

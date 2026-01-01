@@ -1,6 +1,7 @@
 
 // let baseURL = 'http://127.0.0.1:5000/';
-let baseURL = 'https://desslynn-funds-tracker.onrender.com/';
+// let baseURL = 'https://desslynn-funds-tracker.onrender.com/';
+let baseURL = 'https://chrissdesy.pythonanywhere.com/';
 
 // alerts
 export function showAlert(typ, msg, title){
